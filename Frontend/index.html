@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Processing</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main>
+      <form id="uploadForm">
+        <input type="file" id="image" name="image" required />
+        <input
+          type="number"
+          id="width"
+          name="width"
+          placeholder="Width"
+          required
+        />
+        <input
+          type="number"
+          id="height"
+          name="height"
+          placeholder="Height"
+          required
+        />
+        <button type="submit">Resize</button>
+      </form>
+
+      <div id="gallery">
+        <h3>Image Gallery</h3>
+        <ul id="radioList"></ul>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("uploadForm");
+
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const formData = new FormData();
+          const fileInput = document.getElementById("image");
+          const width = document.getElementById("width").value;
+          const height = document.getElementById("height").value;
+
+          const file = fileInput.files[0];
+          if (!file) return alert("No file selected.");
+
+          formData.append("image", file);
+
+          // Upload image first
+          const uploadRes = await fetch("http://localhost:3000/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadRes.ok) {
+            return alert("Image upload failed.");
+          }
+
+          // Then resize it
+          const resizeRes = await fetch(
+            `http://localhost:3000/resize?filename=${encodeURIComponent(file.name)}&width=${width}&height=${height}`,
+            { method: "POST" },
+          );
+
+          if (!resizeRes.ok) {
+            alert("Resize failed.");
+          } else {
+            alert("Image uploaded and resized.");
+            loadImages(); // refresh gallery
+          }
+        });
+
+        async function loadImages() {
+          const res = await fetch("http://localhost:3000/images");
+          const images = await res.json();
+
+          const radioList = document.getElementById("radioList");
+          radioList.innerHTML = "";
+
+          images.forEach((imgName, index) => {
+            const li = document.createElement("li");
+
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = "imageSelect";
+            input.id = `cb${index}`;
+
+            const label = document.createElement("label");
+            label.setAttribute("for", input.id);
+
+            const img = document.createElement("img");
+            img.src = `../Backend/images/${imgName}`;
+            img.alt = imgName;
+
+            label.appendChild(img);
+            li.appendChild(input);
+            li.appendChild(label);
+            radioList.appendChild(li);
+
+            input.addEventListener("change", () =>
+              showResizeForm(imgName, img),
+            );
+          });
+        }
+
+        function showResizeForm(filename, img) {
+          let existing = document.getElementById("resizeForm");
+          if (existing) existing.remove();
+
+          const form = document.createElement("form");
+          form.id = "resizeForm";
+          form.style.marginTop = "10px";
+
+          const widthInput = document.createElement("input");
+          widthInput.type = "number";
+          widthInput.placeholder = "Width";
+          widthInput.name = "width";
+          widthInput.required = true;
+
+          const heightInput = document.createElement("input");
+          heightInput.type = "number";
+          heightInput.placeholder = "Height";
+          heightInput.name = "height";
+          heightInput.required = true;
+
+          const submitBtn = document.createElement("button");
+          submitBtn.textContent = "Resize";
+          submitBtn.type = "submit";
+
+          form.appendChild(widthInput);
+          form.appendChild(heightInput);
+          form.appendChild(submitBtn);
+
+          img.parentNode.appendChild(form);
+
+          form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const width = widthInput.value;
+            const height = heightInput.value;
+
+            try {
+              const response = await fetch(img.src);
+              const blob = await response.blob();
+              const file = new File([blob], filename, { type: blob.type });
+
+              const formData = new FormData();
+              formData.append("image", file);
+
+              await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                body: formData,
+              });
+
+              const resizeRes = await fetch(
+                `http://localhost:3000/resize?filename=${encodeURIComponent(filename)}&width=${width}&height=${height}`,
+                { method: "POST" },
+              );
+
+              if (!resizeRes.ok) {
+                alert("Resize failed.");
+              } else {
+                alert("Image resized.");
+                loadImages();
+              }
+            } catch (err) {
+              console.error("Resize error:", err);
+            }
+          });
+        }
+
+        loadImages();
+      });
+    </script>
+  </body>
+</html>
