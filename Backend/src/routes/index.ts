@@ -1,5 +1,5 @@
 import express from "express";
-import resize from "./api/imageresize";
+import resize from "./api/resize";
 import upload from "./api/upload";
 import imgrouter from "./api/images";
 
