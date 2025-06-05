@@ -2,9 +2,7 @@ import request from "supertest";
 import path from "path";
 import app from "../src/index";
 
-
 describe("Image Processing API", () => {
-
   it("should upload an image", (done) => {
     request(app)
       .post("/upload")
@@ -37,5 +35,4 @@ describe("Image Processing API", () => {
         done();
       });
   });
-
 });

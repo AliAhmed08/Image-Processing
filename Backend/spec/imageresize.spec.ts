@@ -1,7 +1,7 @@
 import request from "supertest";
 import path from "path";
 import fs from "fs";
-import app from "../src/index"; 
+import app from "../src/index";
 describe("POST /resize", () => {
   const filename = "test.jpg";
   const width = 100;
@@ -9,9 +9,8 @@ describe("POST /resize", () => {
   const resizedFile = path.join(
     process.cwd(),
     "images",
-    `${filename}_${width}x${height}.jpg`
+    `${filename}_${width}x${height}.jpg`,
   );
-
 
   it("should resize image and respond with success", async () => {
     const response = await request(app)

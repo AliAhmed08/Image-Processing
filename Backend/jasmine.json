@@ -1,10 +1,6 @@
 {
   "spec_dir": "spec",
-  "spec_files": [
-    "**/*[sS]pec.ts"
-  ],
+  "spec_files": ["**/*[sS]pec.ts"],
   "helpers": [],
-  "requires": [
-    "ts-node/register"
-  ]
+  "requires": ["ts-node/register"]
 }

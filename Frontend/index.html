@@ -96,10 +96,9 @@
             const img = document.createElement("img");
             img.src = `../Backend/images/${imgName}`;
             img.alt = imgName;
-            const h4 = document.createElement('h4')
-            h4.innerHTML = `<a href = '${img.src}' target="_blank">Image URL</a>`
+            const h4 = document.createElement("h4");
+            h4.innerHTML = `<a href = '${img.src}' target="_blank">Image URL</a>`;
 
-            
             label.appendChild(img);
             li.appendChild(input);
             li.appendChild(label);
@@ -109,7 +108,6 @@
             input.addEventListener("change", () =>
               showResizeForm(imgName, img),
             );
-            
           });
         }
 
