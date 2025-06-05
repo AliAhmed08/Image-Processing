@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response} from "express";
 import sharp from "sharp";
 import path from "path";
 import cors from "cors";
@@ -11,7 +11,7 @@ resize.use(
   }),
 );
 
-resize.post("/resize", async (req, res) => {
+resize.post("/resize", async (req: Request, res: Response): Promise<void> => {
   try {
     const { filename, width, height } = req.query;
 

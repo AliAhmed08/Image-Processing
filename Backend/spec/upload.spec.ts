@@ -1,7 +1,6 @@
 import request from "supertest";
-import fs from "fs";
 import path from "path";
-import app from "../server.js";
+import app from "../src/index";
 
 
 describe("Image Processing API", () => {

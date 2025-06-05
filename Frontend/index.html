@@ -29,6 +29,7 @@
 
       <div id="gallery">
         <h3>Image Gallery</h3>
+        <!-- <h2 id="h2"></h2> -->
         <ul id="radioList"></ul>
       </div>
     </main>
@@ -95,15 +96,20 @@
             const img = document.createElement("img");
             img.src = `../Backend/images/${imgName}`;
             img.alt = imgName;
+            const h4 = document.createElement('h4')
+            h4.innerHTML = `<a href = '${img.src}' target="_blank">Image URL</a>`
 
+            
             label.appendChild(img);
             li.appendChild(input);
             li.appendChild(label);
+            label.appendChild(h4);
             radioList.appendChild(li);
 
             input.addEventListener("change", () =>
               showResizeForm(imgName, img),
             );
+            
           });
         }
 
@@ -164,8 +170,9 @@
               if (!resizeRes.ok) {
                 alert("Resize failed.");
               } else {
-                alert("Image resized.");
                 loadImages();
+
+                // img.insertAdjacentHTML("afterend", `<a href = '${img.src}'> Resized Image URL</a>`);
               }
             } catch (err) {
               console.error("Resize error:", err);

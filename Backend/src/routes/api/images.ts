@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response} from "express";
 import fs from "fs";
 import cors from "cors";
 import path from "path";
@@ -11,7 +11,7 @@ imgrouter.use(
   }),
 );
 
-imgrouter.get("/images", (req, res) => {
+imgrouter.get("/images", (req: Request, res: Response): void => {
   const imageDir = path.join(process.cwd(), "images");
 
   fs.readdir(imageDir, (err, files) => {

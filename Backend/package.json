@@ -2,7 +2,6 @@
   "name": "image-processing",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "jasmine",
     "build": "npx tsc",

@@ -1,5 +1,5 @@
 import multer from "multer";
-import express from "express";
+import express, { type Request, type Response} from "express";
 import cors from "cors";
 import path from "path";
 
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 
 const uploadMiddleware = multer({ storage });
 
-upload.post("/upload", uploadMiddleware.single("image"), (req, res) => {
+upload.post("/upload", uploadMiddleware.single("image"), (req: Request, res: Response): void => {
   res.json({ message: "Uploaded", filename: req.file });
 });
 
