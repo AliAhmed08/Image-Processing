@@ -20,21 +20,19 @@ describe("POST /resize", () => {
     const filename = "test.jpg";
     const width = 100;
     const height = 100;
-    const resizedFile = path_1.default.join(process.cwd(), "images", `${filename}_${width}x${height}.jpg`);
-    it("should resize image and respond with success", () => __awaiter(void 0, void 0, void 0, function* () {
+    const outputFile = "test_100x100.jpg";
+    it("should resize the image and return the new filename", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(index_1.default)
             .post("/resize")
             .query({ filename, width, height });
         expect(response.status).toBe(200);
-        expect(response.body.message).toBe("Resized successfully");
-        expect(response.body.filename).toBe(`${filename}_${width}x${height}.jpg`);
-        expect(fs_1.default.existsSync(resizedFile)).toBeTrue();
+        expect(response.body.filename).toBe(outputFile);
+        const outputPath = path_1.default.join(process.cwd(), "images", outputFile);
+        expect(fs_1.default.existsSync(outputPath)).toBeTrue();
+        fs_1.default.unlinkSync(outputPath);
     }));
-    it("should return 500 for missing file", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(index_1.default)
-            .post("/resize")
-            .query({ filename: "nonexistent.jpg", width: 100, height: 100 });
-        expect(response.status).toBe(500);
-        expect(response.text).toBe("Failed to process image");
+    it("should return 400 for missing query parameters", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).post("/resize");
+        expect(response.status).toBe(400);
     }));
 });

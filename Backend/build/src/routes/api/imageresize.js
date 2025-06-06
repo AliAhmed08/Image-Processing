@@ -17,13 +17,14 @@ const sharp_1 = __importDefault(require("sharp"));
 const path_1 = __importDefault(require("path"));
 function resizeImage(filename, width, height) {
     return __awaiter(this, void 0, void 0, function* () {
-        const imagePath = path_1.default.join(process.cwd(), "uploads", filename);
-        const newFileName = `${path_1.default.parse(filename).name}_${width}x${height}.jpg`;
-        const outputPath = path_1.default.join(process.cwd(), "images", newFileName);
-        yield (0, sharp_1.default)(imagePath)
+        const inputPath = path_1.default.join(process.cwd(), "uploads", filename);
+        const { name } = path_1.default.parse(filename);
+        const outputFilename = `${name}_${width}x${height}.jpg`;
+        const outputPath = path_1.default.join(process.cwd(), "images", outputFilename);
+        yield (0, sharp_1.default)(inputPath)
             .resize(width, height)
             .toFormat("jpg")
             .toFile(outputPath);
-        return newFileName;
+        return outputFilename;
     });
 }

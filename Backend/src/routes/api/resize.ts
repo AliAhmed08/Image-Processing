@@ -7,7 +7,7 @@ const resize = express.Router();
 resize.use(
   cors({
     origin: "http://127.0.0.1:5500",
-  })
+  }),
 );
 
 resize.post("/resize", async (req: Request, res: Response): Promise<void> => {
@@ -22,7 +22,7 @@ resize.post("/resize", async (req: Request, res: Response): Promise<void> => {
     const resizedFile = await resizeImage(
       filename as string,
       parseInt(width as string, 10),
-      parseInt(height as string, 10)
+      parseInt(height as string, 10),
     );
 
     res.json({

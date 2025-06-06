@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine",
+    "test": "jasmine --config=jasmine.json",
     "build": "npx tsc",
     "start": "nodemon src/index.ts",
     "lint": "eslint .",

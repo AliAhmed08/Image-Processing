@@ -4,16 +4,18 @@ import path from "path";
 export async function resizeImage(
   filename: string,
   width: number,
-  height: number
+  height: number,
 ): Promise<string> {
-  const imagePath = path.join(process.cwd(), "uploads", filename);
-  const newFileName = `${path.parse(filename).name}_${width}x${height}.jpg`;
-  const outputPath = path.join(process.cwd(), "images", newFileName);
+  const inputPath = path.join(process.cwd(), "uploads", filename);
 
-  await sharp(imagePath)
+  const { name } = path.parse(filename);
+  const outputFilename = `${name}_${width}x${height}.jpg`;
+  const outputPath = path.join(process.cwd(), "images", outputFilename);
+
+  await sharp(inputPath)
     .resize(width, height)
     .toFormat("jpg")
     .toFile(outputPath);
 
-  return newFileName;
+  return outputFilename;
 }

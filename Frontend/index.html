@@ -29,7 +29,6 @@
 
       <div id="gallery">
         <h3>Image Gallery</h3>
-        <!-- <h2 id="h2"></h2> -->
         <ul id="radioList"></ul>
       </div>
     </main>
@@ -51,7 +50,6 @@
 
           formData.append("image", file);
 
-          // Upload image first
           const uploadRes = await fetch("http://localhost:3000/upload", {
             method: "POST",
             body: formData,
@@ -61,7 +59,6 @@
             return alert("Image upload failed.");
           }
 
-          // Then resize it
           const resizeRes = await fetch(
             `http://localhost:3000/resize?filename=${encodeURIComponent(file.name)}&width=${width}&height=${height}`,
             { method: "POST" },
@@ -168,8 +165,6 @@
                 alert("Resize failed.");
               } else {
                 loadImages();
-
-                // img.insertAdjacentHTML("afterend", `<a href = '${img.src}'> Resized Image URL</a>`);
               }
             } catch (err) {
               console.error("Resize error:", err);
